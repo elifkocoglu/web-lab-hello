@@ -126,8 +126,8 @@ function App() {
 
       {/* Uygulama-1: Semantik Footer [cite: 94, 684] */}
       <footer>
-        <p>&copy; 2026 Elif Koçoğlu. Tüm hakları saklıdır.</p>
-      </footer>
+  <p>&copy; 2026 Elif Koçoğlu. Yazılım Mühendisliği - LAB 2</p>
+</footer>
     </div>
   )
 }
