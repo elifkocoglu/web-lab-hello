@@ -21,4 +21,4 @@ Projeyi yerel ortamınızda çalıştırmak için:
 ## Erişilebilirlik Testi
 LAB-2 kapsamında yapılan Lighthouse analizinde **93/100** erişilebilirlik puanı alınmıştır.
 
-![Lighthouse Erişilebilirlik Raporu](./lighthouse-report.png)
+![Lighthouse Erişilebilirlik Raporu](./lighthouse-report.png.png)
