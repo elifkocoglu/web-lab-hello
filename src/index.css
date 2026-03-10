@@ -1,4 +1,6 @@
-/* Temel body ayarları — index.css */
+@import './styles/tokens.css';
+
+/* Temel body ayarları */
 body {
   margin: 0;
   min-width: 320px;
