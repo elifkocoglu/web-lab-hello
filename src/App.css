@@ -1,42 +1,261 @@
-#root {
-  max-width: 1280px;
+/* ===== Genel Sıfırlama ===== */
+* { margin: 0; padding: 0; box-sizing: border-box; }
+body { font-family: system-ui, sans-serif; line-height: 1.6; color: #1F2937; background-color: #fff; }
+
+/* ===== Skip Link (Erişilebilirlik) ===== */
+.skip-link {
+  position: absolute;
+  top: -100px;
+  left: 0;
+  background: #1E3A8A;
+  color: white;
+  padding: 8px 16px;
+  z-index: 100;
+  text-decoration: none;
+}
+.skip-link:focus {
+  top: 0;
+}
+
+/* ===== Focus göstergesi — ASLA kaldırma ===== */
+:focus {
+  outline: 2px solid #2563EB;
+  outline-offset: 2px;
+}
+
+/* ===== Header ===== */
+header {
+  background-color: #F9FAFB;
+  border-bottom: 1px solid #E5E7EB;
+  padding: 1rem 2rem;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+}
+
+header h1 {
+  font-size: 1.5rem;
+  color: #1E3A8A;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+nav a {
+  text-decoration: none;
+  color: #1F2937;
+  padding: 0.25rem 0.75rem;
+  border-radius: 8px;
+  transition: background-color 150ms ease, color 150ms ease;
+}
+
+nav a:hover,
+nav a:focus {
+  background-color: #1E3A8A;
+  color: white;
+}
+
+/* ===== Main ===== */
+main {
+  max-width: 1200px;
   margin: 0 auto;
-  padding: 2rem;
+}
+
+/* ===== Section'lar ===== */
+section {
+  padding: 3rem 1rem;
+}
+
+section h2 {
+  font-size: 2rem;
+  color: #1E3A8A;
+  text-align: center;
+  margin-bottom: 1.5rem;
+}
+
+/* ===== Hakkımda ===== */
+.about-content {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 1.5rem;
   text-align: center;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+.about-content figure {
+  max-width: 150px;
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+.about-content img {
+  border-radius: 50%;
+  width: 150px;
+  height: 150px;
+  object-fit: cover;
+}
+
+.about-content figcaption {
+  font-size: 0.85rem;
+  color: #6B7280;
+  margin-top: 0.5rem;
+}
+
+/* ===== Beceri Etiketleri ===== */
+.skill-tags {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.5rem;
+  list-style: none;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.skill-tags li {
+  background-color: #1E3A8A;
+  color: white;
+  padding: 0.25rem 0.75rem;
+  border-radius: 9999px;
+  font-size: 0.85rem;
+}
+
+/* ===== Proje Kartları ===== */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 1.5rem;
+}
+
+.project-card {
+  background: #F9FAFB;
+  border: 1px solid #E5E7EB;
+  border-radius: 8px;
+  padding: 1.5rem;
+  display: flex;
+  flex-direction: column;
+  transition: transform 300ms ease, box-shadow 300ms ease;
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: 0 10px 15px rgba(0,0,0,0.1);
+}
+
+.project-card h3 {
+  font-size: 1.25rem;
+  margin-bottom: 0.5rem;
+  color: #1F2937;
+}
+
+.project-card p {
+  color: #6B7280;
+  flex-grow: 1;
+}
+
+.project-card .skill-tags {
+  justify-content: flex-start;
+  margin-top: auto;
+  padding-top: 1rem;
+}
+
+/* ===== İletişim Formu ===== */
+fieldset {
+  border: none;
+  max-width: 500px;
+  margin: 0 auto;
+}
+
+legend {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 1rem;
+  text-align: center;
+  width: 100%;
+}
+
+.form-group {
+  margin-bottom: 1rem;
+}
+
+label {
+  display: block;
+  margin-bottom: 0.25rem;
+  font-weight: 600;
+}
+
+input, textarea, select {
+  width: 100%;
+  padding: 0.5rem;
+  border: 1px solid #ccc;
+  border-radius: 4px;
+  font-family: inherit;
+  font-size: 1rem;
+  transition: border-color 150ms ease;
+}
+
+input:focus, textarea:focus, select:focus {
+  border-color: #2563EB;
+}
+
+button[type="submit"] {
+  display: block;
+  width: 100%;
+  padding: 0.75rem;
+  background: #1E3A8A;
+  color: white;
+  border: none;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background-color 150ms ease;
+}
+
+button[type="submit"]:hover,
+button[type="submit"]:focus {
+  background: #2563EB;
+}
+
+.error-msg {
+  color: #DC2626;
+  font-size: 0.85rem;
+}
+
+/* ===== Footer ===== */
+footer {
+  text-align: center;
+  padding: 2rem 1rem;
+  background: #F9FAFB;
+  border-top: 1px solid #E5E7EB;
+  color: #6B7280;
+  font-size: 0.85rem;
+}
+
+/* ===== Responsive ===== */
+@media (max-width: 639px) {
+  header {
+    flex-direction: column;
+    text-align: center;
   }
-  to {
-    transform: rotate(360deg);
+  nav ul {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+@media (min-width: 640px) {
+  .about-content {
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
   }
-}
-
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+  .about-content .skill-tags {
+    justify-content: flex-start;
+  }
+  button[type="submit"] {
+    width: auto;
+  }
 }
