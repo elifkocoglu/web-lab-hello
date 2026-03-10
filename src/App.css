@@ -1,42 +1,120 @@
-#root {
-  max-width: 1280px;
-  margin: 0 auto;
-  padding: 2rem;
-  text-align: center;
+/* ========================================
+   1. GENEL SIFIRLAMA & TEMEL AYARLAR (Mobile-First)
+   ======================================== */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
 }
 
-.logo {
-  height: 6em;
-  padding: 1.5em;
-  will-change: filter;
-  transition: filter 300ms;
-}
-.logo:hover {
-  filter: drop-shadow(0 0 2em #646cffaa);
-}
-.logo.react:hover {
-  filter: drop-shadow(0 0 2em #61dafbaa);
+body {
+  font-family: var(--font-sans);
+  font-size: var(--text-base);
+  line-height: 1.6;
+  color: var(--color-text);
+  background-color: var(--color-bg);
 }
 
-@keyframes logo-spin {
-  from {
-    transform: rotate(0deg);
+section {
+  padding: var(--space-xl) var(--space-md);
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+  display: block;
+}
+
+/* ========================================
+   2. HEADER & NAVIGASYON (Flexbox - 15 Puan)
+   ======================================== */
+header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: var(--space-md) var(--space-lg);
+  background-color: var(--color-surface);
+  border-bottom: 1px solid var(--color-border);
+  position: sticky;
+  top: 0;
+  z-index: 10;
+}
+
+nav ul {
+  display: flex;
+  list-style: none;
+  gap: var(--space-sm);
+  padding: 0;
+  margin: 0;
+}
+
+@media (max-width: 639px) {
+  header {
+    flex-direction: column;
+    gap: var(--space-sm);
   }
-  to {
-    transform: rotate(360deg);
+  nav ul {
+    flex-direction: column;
+    align-items: center;
   }
 }
 
-@media (prefers-reduced-motion: no-preference) {
-  a:nth-of-type(2) .logo {
-    animation: logo-spin infinite 20s linear;
+/* ========================================
+   3. PROJE GRID & KARTLAR (Grid - 15 Puan)
+   ======================================== */
+.project-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: var(--space-xl);
+}
+
+.project-card {
+  display: flex;
+  flex-direction: column;
+  background: var(--color-surface);
+  border: 1px solid var(--color-border);
+  border-radius: var(--radius-md);
+  overflow: hidden;
+  transition: transform var(--transition-normal), box-shadow var(--transition-normal);
+}
+
+.project-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.project-card img {
+  height: 200px;
+  object-fit: cover;
+}
+
+.project-card p {
+  padding: var(--space-md) var(--space-lg);
+  color: var(--color-muted);
+  flex-grow: 1;
+}
+
+/* ========================================
+   4. RESPONSIVE BREAKPOINTS (3 Adet - 15 Puan)
+   ======================================== */
+@media (min-width: 640px) {
+  section {
+    padding: var(--space-2xl) var(--space-xl);
+  }
+  .about-content {
+    display: flex;
+    flex-direction: row;
+    text-align: left;
+    align-items: flex-start;
   }
 }
 
-.card {
-  padding: 2em;
-}
-
-.read-the-docs {
-  color: #888;
+@media (min-width: 1024px) {
+  main {
+    max-width: 1200px;
+    margin: 0 auto;
+  }
+  .project-grid {
+    grid-template-columns: repeat(3, 1fr);
+  }
 }
