@@ -1,170 +1,147 @@
-import './App.css'
+import { useState, useEffect } from "react";
+import type { Project, Category, SortField, SortOrder } from "./types/project";
+import { fetchProjects } from "./services/projectService";
+import { applyFilters } from "./utils/projectHelpers";
+import Card from "./components/Card";
+import Input from "./components/Input";
+import Button from "./components/Button";
+import Alert from "./components/Alert";
 
-function App() {
+export default function App() {
+  // --- STATE ---
+  const [projects, setProjects] = useState<Project[]>([]);
+  const [search, setSearch] = useState("");
+  const [category, setCategory] = useState<Category | "all">("all");
+  const [sortField, setSortField] = useState<SortField>("year");
+  const [sortOrder, setSortOrder] = useState<SortOrder>("desc");
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+
+  // --- VERi CEKME ---
+  useEffect(() => {
+    async function load() {
+      try {
+        setLoading(true);
+        setError(null);
+        const data = await fetchProjects();
+        setProjects(data);
+      } catch (err) {
+        setError(err instanceof Error ? err.message : "Bilinmeyen hata");
+      } finally {
+        setLoading(false);
+      }
+    }
+    load();
+  }, []);
+
+  // --- TURETILMIS (DERIVED) VERi ---
+  const filtered = applyFilters(
+    projects,
+    search,
+    category,
+    sortField,
+    sortOrder
+  );
+
+  const categories: (Category | "all")[] = ["all", "frontend", "fullstack", "backend"];
+
+  // --- UI ---
   return (
-    <>
-      {/* Skip Navigation - Erişilebilirlik */}
-      <a href="#main-content" className="skip-link">
-        Ana içeriğe atla
-      </a>
+    <div className="min-h-screen bg-gray-50 dark:bg-gray-950 p-4 md:p-8">
+      <div className="max-w-6xl mx-auto">
+        <h1 className="text-3xl font-bold text-gray-900 dark:text-white mb-8">
+          Projelerim
+        </h1>
 
-      {/* HEADER */}
-      <header>
-        <h1>Elif Koçoğlu</h1>
-        <nav aria-label="Ana navigasyon">
-          <ul>
-            <li><a href="#hakkimda">Hakkımda</a></li>
-            <li><a href="#projeler">Projeler</a></li>
-            <li><a href="#iletisim">İletişim</a></li>
-          </ul>
-        </nav>
-      </header>
+        {/* HATA DURUMU */}
+        {error && (
+          <Alert variant="error" title="Hata">
+            {error}
+          </Alert>
+        )}
 
-      {/* MAIN */}
-      <main id="main-content">
-        {/* Hakkımda Bölümü */}
-        <section id="hakkimda">
-          <h2>Hakkımda</h2>
-          <div className="about-content">
-            <figure>
-              <img
-                src="https://api.dicebear.com/7.x/initials/svg?seed=EK&backgroundColor=1e3a8a"
-                alt="Elif Koçoğlu profil görseli"
-              />
-              <figcaption>Elif Koçoğlu</figcaption>
-            </figure>
-            <div>
-              <p>
-                Merhaba! Ben Elif Koçoğlu. Yazılım Mühendisliği öğrencisiyim.
-                Yapay zeka ve psikoloji alanlarına ilgi duyuyorum.
-                Modern web teknolojileriyle kullanıcı dostu arayüzler oluşturmayı öğreniyorum.
-              </p>
-              <p><strong>Öğrenci No:</strong> 230541015</p>
-              <ul className="skill-tags" role="list" aria-label="Beceri etiketleri">
-                <li>HTML5</li>
-                <li>CSS3</li>
-                <li>JavaScript</li>
-                <li>React</li>
-                <li>TypeScript</li>
-                <li>Git</li>
-              </ul>
-            </div>
+        {/* FILTRELER */}
+        <div className="flex flex-col sm:flex-row gap-4 mb-8">
+          <Input
+            id="search"
+            placeholder="Proje ara..."
+            value={search}
+            onChange={(e) => setSearch(e.target.value)}
+          />
+          <div className="flex gap-2 flex-wrap">
+            {categories.map((cat) => (
+              <Button
+                key={cat}
+                variant={category === cat ? "primary" : "ghost"}
+                size="sm"
+                onClick={() => setCategory(cat)}
+              >
+                {cat === "all" ? "Tumu" : cat}
+              </Button>
+            ))}
           </div>
-        </section>
-
-        {/* Projelerim Bölümü */}
-        <section id="projeler">
-          <h2>Projelerim</h2>
-          <div className="project-grid">
-            <article className="project-card">
-              <h3>Portföy Web Sitesi</h3>
-              <p>
-                React ve TypeScript ile geliştirilmiş kişisel portföy sayfası.
-                Semantik HTML ve erişilebilirlik ilkelerine uygun olarak tasarlanmıştır.
-              </p>
-              <ul className="skill-tags">
-                <li>React</li>
-                <li>TypeScript</li>
-                <li>Vite</li>
-              </ul>
-            </article>
-
-            <article className="project-card">
-              <h3>Yapay Zeka Projesi</h3>
-              <p>
-                Makine öğrenmesi algoritmalarıyla veri analizi ve tahminleme uygulaması.
-              </p>
-              <ul className="skill-tags">
-                <li>Python</li>
-                <li>TensorFlow</li>
-              </ul>
-            </article>
-
-            <article className="project-card">
-              <h3>Psikoloji Anket Uygulaması</h3>
-              <p>
-                Web tabanlı psikoloji anket formu ve sonuç analiz platformu.
-              </p>
-              <ul className="skill-tags">
-                <li>JavaScript</li>
-                <li>HTML5</li>
-                <li>CSS3</li>
-              </ul>
-            </article>
+          <div className="flex gap-2">
+            <select
+              value={sortField}
+              onChange={(e) => setSortField(e.target.value as SortField)}
+              className="border rounded-lg px-3 py-2 dark:bg-gray-800 dark:text-white"
+            >
+              <option value="year">Yil</option>
+              <option value="title">Baslik</option>
+            </select>
+            <Button
+              variant="ghost"
+              size="sm"
+              onClick={() => setSortOrder((o) => (o === "asc" ? "desc" : "asc"))}
+            >
+              {sortOrder === "asc" ? "A-Z" : "Z-A"}
+            </Button>
           </div>
-        </section>
+        </div>
 
-        {/* İletişim Bölümü */}
-        <section id="iletisim">
-          <h2>İletişim</h2>
-          <form action="#" method="POST" noValidate>
-            <fieldset>
-              <legend>İletişim Formu</legend>
+        {/* YUKLENIYOR */}
+        {loading && (
+          <p className="text-center text-gray-500">Yukleniyor...</p>
+        )}
 
-              <div className="form-group">
-                <label htmlFor="name">Ad Soyad:</label>
-                <input
-                  type="text"
-                  id="name"
-                  name="name"
-                  required
-                  minLength={2}
-                  placeholder="Adınızı giriniz"
-                  aria-describedby="name-error"
-                />
-                <small id="name-error" className="error-msg" role="alert"></small>
+        {/* PROJE LISTESI */}
+        {!loading && filtered.length === 0 && (
+          <p className="text-center text-gray-500">Eslesen proje bulunamadi.</p>
+        )}
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
+          {filtered.map((project) => (
+            <Card
+              key={project.id}
+              variant="elevated"
+              title={project.title}
+              image={project.image}
+              imageAlt={`${project.title} ekran goruntusu`}
+            >
+              <p className="text-sm mb-3 text-gray-600 dark:text-gray-300">
+                {project.description}
+              </p>
+              <div className="flex flex-wrap gap-1">
+                {project.tech.map((t) => (
+                  <span
+                    key={t}
+                    className="bg-blue-100 dark:bg-blue-900 text-blue-800 dark:text-blue-200 text-xs px-2 py-0.5 rounded-full"
+                  >
+                    {t}
+                  </span>
+                ))}
               </div>
-
-              <div className="form-group">
-                <label htmlFor="email">E-posta:</label>
-                <input
-                  type="email"
-                  id="email"
-                  name="email"
-                  required
-                  placeholder="ornek@mail.com"
-                  aria-describedby="email-error"
-                />
-                <small id="email-error" className="error-msg" role="alert"></small>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="subject">Konu:</label>
-                <select id="subject" name="subject" required aria-describedby="subject-error">
-                  <option value="">-- Seçiniz --</option>
-                  <option value="is">İş Teklifi</option>
-                  <option value="soru">Soru</option>
-                  <option value="oneri">Öneri</option>
-                </select>
-                <small id="subject-error" className="error-msg" role="alert"></small>
-              </div>
-
-              <div className="form-group">
-                <label htmlFor="message">Mesajınız:</label>
-                <textarea
-                  id="message"
-                  name="message"
-                  rows={5}
-                  required
-                  minLength={10}
-                  placeholder="Mesajınızı buraya yazınız..."
-                  aria-describedby="message-error"
-                ></textarea>
-                <small id="message-error" className="error-msg" role="alert"></small>
-              </div>
-
-              <button type="submit">Gönder</button>
-            </fieldset>
-          </form>
-        </section>
-      </main>
-
-      {/* FOOTER */}
-      <footer>
-        <p>&copy; 2025 Elif Koçoğlu. Tüm hakları saklıdır.</p>
-      </footer>
-    </>
-  )
+              <p className="text-xs text-gray-400 mt-2">
+                {project.year} &middot; {project.category}
+              </p>
+            </Card>
+          ))}
+        </div>
+        
+        {/* SONUC SAYISI */}
+        <p className="text-sm text-gray-500 mt-4 text-center">
+          {filtered.length} / {projects.length} proje gosteriliyor
+        </p>
+      </div>
+    </div>
+  );
 }
-
-export default App
